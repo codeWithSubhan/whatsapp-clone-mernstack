@@ -3,6 +3,7 @@ const grid = require("gridfs-stream");
 
 const Conversation = require("../models/conversationModel");
 const Message = require("../models/messageModel");
+const { BASE_URL } = require("../../reactJS/src/constants/data");
 
 let gfs, gridPhotosBucket;
 const conn = mongoose.connection;
@@ -39,14 +40,10 @@ exports.getMessage = async (req, res) => {
   }
 };
 
-console.log();
-
 exports.uploadPhoto = (req, res) => {
-  console.log("req.file", req.file);
   if (!req.file) return res.status(404).json("File not found");
 
-  const url = "http://localhost:4000";
-  const imageUrl = `${url}/api/message/file/${req.file.filename}`;
+  const imageUrl = `${BASE_URL}/api/message/file/${req.file.filename}`;
 
   res.status(200).json(imageUrl);
 };
@@ -54,7 +51,6 @@ exports.uploadPhoto = (req, res) => {
 exports.getImage = async (req, res) => {
   try {
     const file = await gfs.files.findOne({ filename: req.params.filename });
-    console.log(file);
     const readStream = gridPhotosBucket.openDownloadStream(file._id);
     readStream.pipe(res);
   } catch (error) {

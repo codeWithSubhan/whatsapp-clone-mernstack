@@ -12,7 +12,7 @@ const AccountProvider = ({ children }) => {
   const socket = useRef();
 
   useEffect(() => {
-    socket.current = io("http://localhost:4000");
+    socket.current = io(BASE_URL);
   }, []);
 
   return (

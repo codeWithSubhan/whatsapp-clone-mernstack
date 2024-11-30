@@ -16,6 +16,10 @@ app.use("/api/users", userRouter);
 app.use("/api/conversation", conversationRouter);
 app.use("/api/message", messageRouter);
 
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});
+
 app.all("*", (req, res) => {
   res.status(404).json({ message: `Can't Find ${req.originalUrl} URL!` });
 });
