@@ -3,7 +3,8 @@ const grid = require("gridfs-stream");
 
 const Conversation = require("../models/conversationModel");
 const Message = require("../models/messageModel");
-const { BASE_URL } = require("../../reactJS/src/constants/data");
+
+const BASE_URL = process.env.BASE_URL;
 
 let gfs, gridPhotosBucket;
 const conn = mongoose.connection;

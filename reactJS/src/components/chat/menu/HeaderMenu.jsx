@@ -4,11 +4,6 @@ import { MoreVert } from "@mui/icons-material";
 import { Menu, MenuItem, styled } from "@mui/material";
 
 import { googleLogout } from "@react-oauth/google";
-// import { AccountContext } from "../../../context/AccountProvider";
-// import { UserContext } from "../../../context/UserProvider";
-
-import { clientId } from "../../../constants/data";
-
 //components
 import InfoDrawer from "../../drawer/Drawer";
 
