@@ -13,7 +13,9 @@ const AccountProvider = ({ children }) => {
   const socket = useRef();
 
   useEffect(() => {
-    socket.current = io(BASE_URL);
+    socket.current = io("https://whatsapp-clone-mernstack.vercel.app", {
+      transports: ["websocket", "polling"],
+    });
   }, []);
 
   return (
