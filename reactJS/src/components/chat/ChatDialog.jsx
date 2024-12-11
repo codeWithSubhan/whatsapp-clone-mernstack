@@ -6,6 +6,7 @@ import Menu from "./menu/Menu";
 import EmptyChat from "./menu/EmptyChat";
 import ChatBox from "./chat/ChatBox";
 import { UserContext } from "../../context/userProvider";
+import { AccountContext } from "../../context/AccountProvider";
 
 const Component = styled(Box)`
   display: flex;
@@ -34,7 +35,7 @@ const dialogStyle = {
 };
 
 const ChatDialog = () => {
-  const { person } = useContext(UserContext);
+  const { person } = useContext(AccountContext);
 
   return (
     <Dialog

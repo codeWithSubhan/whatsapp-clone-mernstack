@@ -39,16 +39,19 @@ const DescriptionContainer = styled(Box)`
 `;
 
 const Profile = () => {
-  const { account } = useContext(AccountContext);
+  const { userData } = useContext(AccountContext);
 
+  console.log(userData);
   return (
     <>
       <ImageContainer>
-        <Image src={account.picture} alt="displaypicture" />
+        <Image src={userData.photo} alt="displaypicture" />
       </ImageContainer>
       <BoxWrapper>
         <Typography>Your name</Typography>
-        <Typography>{account.name}</Typography>
+        <Typography style={{ textTransform: "capitalize" }}>
+          {userData.name}
+        </Typography>
       </BoxWrapper>
       <DescriptionContainer>
         <Typography>

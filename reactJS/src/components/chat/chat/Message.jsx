@@ -40,10 +40,11 @@ const Time = styled(Typography)`
 `;
 
 function Message({ message }) {
-  const { account } = useContext(AccountContext);
+  const { person, userData } = useContext(AccountContext);
+
   return (
     <>
-      {account.sub === message.senderId ? (
+      {/* {account.sub === message.senderId ? (
         <Own>
           {message.type === "file" ? (
             <ImageMessage message={message} />
@@ -59,6 +60,16 @@ function Message({ message }) {
             <TextMessage message={message} />
           )}
         </Wrapper>
+      )} */}
+
+      {message.sender._id === userData._id ? (
+        <Own>
+          <TextMessage message={message} />
+        </Own>
+      ) : (
+        <Wrapper>
+          <TextMessage message={message} />
+        </Wrapper>
       )}
     </>
   );
@@ -67,7 +78,7 @@ function Message({ message }) {
 const TextMessage = ({ message }) => {
   return (
     <>
-      <Text>{message.text}</Text>
+      <Text>{message.content}</Text>
       <Time>{formatDate(message.createdAt)}</Time>
     </>
   );

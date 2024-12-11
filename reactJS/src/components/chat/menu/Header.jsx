@@ -49,13 +49,12 @@ const Header = () => {
   return (
     <>
       <Component>
-        <Image src={account.picture} onClick={() => toggleDrawer()} />
+        <Image src={account?.picture} onClick={() => toggleDrawer()} />
         <Wrapper>
           <MessageIcon />
           <HeaderMenu />
         </Wrapper>
       </Component>
-      {/* <InfoDrawer open={openDrawer} setOpen={setOpenDrawer} profile={true} /> */}
     </>
   );
 };

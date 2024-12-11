@@ -42,27 +42,14 @@ const Text = styled(Typography)`
 `;
 
 const Conversation = ({ user }) => {
-  const url = user.picture || emptyProfilePicture;
+  const url = user.photo || emptyProfilePicture;
 
-  const { setPerson } = useContext(UserContext);
-  const { account, newMessageFlag } = useContext(AccountContext);
-
-  const [message, setMessage] = useState({});
-
-  useEffect(() => {
-    const getConversationMessage = async () => {
-      const data = await getConversation({
-        senderId: account.sub,
-        receiverId: user.sub,
-      });
-      setMessage({ text: data?.message, timestamp: data?.updatedAt });
-    };
-    getConversationMessage();
-  }, [newMessageFlag]);
+  // const { setPerson } = useContext(UserContext);
+  const { setPerson } = useContext(AccountContext);
 
   const getUser = async () => {
     setPerson(user);
-    await setConversation({ senderId: account.sub, receiverId: user.sub });
+    // await setConversation({ senderId: account.sub, receiverId: user.sub });
   };
 
   return (
@@ -72,14 +59,18 @@ const Conversation = ({ user }) => {
       </Box>
       <Box style={{ width: "100%" }}>
         <Container>
-          <Typography>{user.name}</Typography>
-          {message?.text && (
+          <Typography style={{ textTransform: "capitalize" }}>
+            {user.name}
+          </Typography>
+          {/* {message?.text && (
             <Timestamp>{formatDate(message?.timestamp)}</Timestamp>
-          )}
+          )} */}
+          <Timestamp>12:30PM</Timestamp>
         </Container>
         <Box>
           <Text>
-            {message?.text?.includes("localhost") ? "media" : message.text}
+            {/* {message?.text?.includes("localhost") ? "media" : message.text} */}
+            media
           </Text>
         </Box>
       </Box>

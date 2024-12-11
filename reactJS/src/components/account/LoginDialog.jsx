@@ -1,11 +1,13 @@
 import { Dialog, Typography, List, ListItem, Box, styled } from "@mui/material";
-import { GoogleLogin } from "@react-oauth/google";
 import { useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 
 import { qrCodeImage } from "../../constants/data";
 import { AccountContext } from "../../context/AccountProvider";
 import { addUser } from "../../services/api";
+import Signin from "../Authentication/Signin";
+import Signup from "../../pages/Signup";
+import Register from "../Authentication/Register";
 
 const Component = styled(Box)`
   display: flex;
@@ -33,9 +35,7 @@ const Title = styled(Typography)`
 const StyledList = styled(List)`
   & > li {
     padding: 0;
-    margin-top: 15px;
     font-size: 18px;
-    line-height: 28px;
     color: #4a4a4a;
   }
 `;
@@ -54,17 +54,14 @@ const dialogStyle = {
 function LoginDialog() {
   const { setAccount } = useContext(AccountContext);
 
-  async function onLoginSuccess(res) {
-    const decoded = jwtDecode(res.credential);
-    setAccount(decoded);
-    const data = await addUser(decoded);
-    console.log("decoded jwt", decoded);
-    console.log("decoded jwt", data);
-  }
+  const style = {
+    width: 400,
+    position: "relative",
+    top: "-28px",
+  };
 
-  function onLoginFailure(err) {
-    console.log(err);
-  }
+  const isLoginPage = window.location.pathname === "/login";
+  const isSignupPage = window.location.pathname === "/signup";
 
   return (
     <Dialog
@@ -75,32 +72,15 @@ function LoginDialog() {
     >
       <Component>
         <Container>
-          <Title>To use WhatsApp on your computer:</Title>
           <StyledList>
-            <ListItem>1. Open WhatsApp on your phone</ListItem>
-            <ListItem>2. Tap Menu Settings and select WhatsApp Web</ListItem>
-            <ListItem>
-              3. Point your phone to this screen to capture the code
-            </ListItem>
+            <Box sx={style}>
+              {isLoginPage && <Signin />}
+              {isSignupPage && <Register />}
+            </Box>
           </StyledList>
         </Container>
         <Box style={{ position: "relative" }}>
           <QRCOde src={qrCodeImage} alt="QR Code" />
-          <Box
-            style={{
-              position: "absolute",
-              top: "50%",
-              transform: "translateX(25%) translateY(-25%)",
-            }}
-          >
-            {/* {showloginButton ? ( */}
-            <GoogleLogin
-              buttonText=""
-              onSuccess={onLoginSuccess}
-              onError={onLoginFailure}
-            />
-            {/* ) : null} */}
-          </Box>
         </Box>
       </Component>
     </Dialog>

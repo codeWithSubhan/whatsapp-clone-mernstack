@@ -8,14 +8,16 @@ const DB = process.env.DATABASE.replace(
 
 const storage = new GridFsStorage({
   url: DB,
-  file: (_, file) => {
+  file: (req, file) => {
+    console.log(req);
+    console.log(file);
     return {
       bucketName: "photos",
-      filename: `${Date.now()}-file-${file.originalname}`,
+      filename: `${Date.now()}_${file.originalname}`,
     };
   },
 });
 
 const upload = multer({ storage });
 
-exports.uploadMulterPhoto = upload.single("file");
+exports.uploadPhoto = upload.single("photo");

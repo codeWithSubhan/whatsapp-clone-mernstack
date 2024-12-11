@@ -4,7 +4,7 @@ import { Box, Typography, styled } from "@mui/material";
 import { Search, MoreVert } from "@mui/icons-material";
 
 import { AccountContext } from "../../../context/AccountProvider";
-import { defaultProfilePicture } from "../../../constants/data";
+import { emptyProfilePicture } from "../../../constants/data";
 
 const Header = styled(Box)`
   height: 44px;
@@ -40,8 +40,9 @@ const Status = styled(Typography)`
   margin-left: 12px !important;
 `;
 
-const ChatHeader = ({ person }) => {
-  const url = person.picture || defaultProfilePicture;
+const ChatHeader = () => {
+  const { person } = useContext(AccountContext);
+  const url = person.photo || emptyProfilePicture;
 
   const { activeUsers } = useContext(AccountContext);
 
@@ -50,11 +51,12 @@ const ChatHeader = ({ person }) => {
       <Image src={url} alt="display picture" />
 
       <Box>
-        <Name>{person.name}</Name>
+        <Name style={{ textTransform: "capitalize" }}>{person.name}</Name>
         <Status>
-          {activeUsers?.find((user) => user.sub === person.sub)
+          {/* {activeUsers?.find((user) => user.sub === person.sub)
             ? "Online"
-            : "Offline"}
+            : "Offline"} */}
+          offline
         </Status>
       </Box>
       <RightContainer>

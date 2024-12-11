@@ -13,5 +13,5 @@ export const qrCodeImage =
 export const emptyProfilePicture =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png";
 
-export const BASE_URL = "https://whatsapp-clone-mernstack.vercel.app";
-// export const BASE_URL = "http://localhost:4000";
+// export const BASE_URL = "https://whatsapp-clone-mernstack.vercel.app";
+export const BASE_URL = "http://localhost:4000";

@@ -1,3 +1,6 @@
+import axios from "axios";
+import { BASE_URL } from "../constants/data";
+
 export const downloadMedia = async (e, originalImage) => {
   e.preventDefault();
   try {
@@ -32,4 +35,20 @@ export const formatDate = (date) => {
   return `${hours < 10 ? "0" + hours : hours}:${
     minutes < 10 ? "0" + minutes : minutes
   }`;
+};
+
+export const getData = async function (endPoint, token) {
+  return await axios.get(`${BASE_URL}/api/v1/${endPoint}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postData = async function (endPoint, token, data = {}) {
+  return await axios.post(`${BASE_URL}/api/v1/${endPoint}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };

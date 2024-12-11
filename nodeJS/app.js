@@ -1,20 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/userRoutes");
-const conversationRouter = require("./routes/conversationRoutes");
+const chatRouter = require("./routes/chatRoutes");
 const messageRouter = require("./routes/messageRoutes");
+const globalError = require("./controllers/errorController");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
-app.use("/api/users", userRouter);
-app.use("/api/conversation", conversationRouter);
-app.use("/api/message", messageRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messageRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
@@ -23,5 +26,7 @@ app.get("/", (req, res) => {
 app.all("*", (req, res) => {
   res.status(404).json({ message: `Can't Find ${req.originalUrl} URL!` });
 });
+
+app.use(globalError);
 
 module.exports = app;

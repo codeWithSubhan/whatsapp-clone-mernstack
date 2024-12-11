@@ -1,19 +1,31 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Messenger from "./components/Messenger";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import AccountProvider from "./context/AccountProvider";
 import UserProvider from "./context/userProvider";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AuthRoute from "./components/Authentication/AuthRoute";
 
 function App() {
-  const clientId =
-    "1049461627897-q5q37241aa93ug6n7hmrajn4uu55lokq.apps.googleusercontent.com";
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <UserProvider>
-        <AccountProvider>
-          <Messenger />
-        </AccountProvider>
-      </UserProvider>
-    </GoogleOAuthProvider>
+    <UserProvider>
+      <AccountProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <AuthRoute>
+                  <Messenger />
+                </AuthRoute>
+              }
+            />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+          </Routes>
+        </BrowserRouter>
+      </AccountProvider>
+    </UserProvider>
   );
 }
 

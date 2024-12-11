@@ -4,8 +4,11 @@ import { Box, styled } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
 
 import Footer from "./Footer";
-import { getMessages, newMessages } from "../../../services/api";
 import Message from "./Message";
+import { postData } from "../../../utils/helper";
+import toast from "react-hot-toast";
+import io from "socket.io-client";
+import { BASE_URL } from "../../../constants/data";
 
 const Wrapper = styled(Box)`
   background-image: url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"});
@@ -29,85 +32,76 @@ const Container = styled(Box)`
   padding: 1px 80px;
 `;
 
-const Messages = ({ person, conversation }) => {
-  const [messages, setMessages] = useState([]);
+let socket, selectedChatCompare;
+
+const Messages = ({ conversation }) => {
   const [incomingMessage, setIncomingMessage] = useState(null);
+  const [socketConnected, setSocketConnected] = useState(false);
   const [value, setValue] = useState();
   const [file, setFile] = useState();
   const [image, setImage] = useState();
 
   const scrollRef = useRef();
 
-  const { account, socket, newMessageFlag, setNewMessageFlag } =
-    useContext(AccountContext);
-
-  useEffect(() => {
-    socket.current.on("getMessage", (data) => {
-      setIncomingMessage({
-        ...data,
-        createdAt: Date.now(),
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    const getMessageDetails = async () => {
-      let data = await getMessages(conversation?._id);
-      setMessages(data);
-    };
-    getMessageDetails();
-  }, [conversation?._id, person?._id, newMessageFlag]);
-
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ transition: "smooth" });
-  }, [messages]);
-
-  useEffect(() => {
-    incomingMessage &&
-      conversation?.members?.includes(incomingMessage.senderId) &&
-      setMessages((prev) => [...prev, incomingMessage]);
-  }, [incomingMessage, conversation]);
-
-  const receiverId = conversation?.members?.find(
-    (member) => member !== account.sub
-  );
+  const {
+    account,
+    isAuth,
+    newMessageFlag,
+    setNewMessageFlag,
+    person,
+    messages,
+    setMessages,
+    chatId,
+    userData,
+  } = useContext(AccountContext);
 
   const sendText = async (e) => {
     let code = e.keyCode || e.which;
-    if (!value) return;
+    if (!value || code !== 13) return;
 
-    if (code === 13) {
-      let message = {};
-      if (!file) {
-        message = {
-          senderId: account.sub,
-          receiverId: receiverId,
-          conversationId: conversation._id,
-          type: "text",
-          text: value,
-        };
-      } else {
-        message = {
-          senderId: account.sub,
-          receiverId: receiverId,
-          conversationId: conversation._id,
-          type: "file",
-          text: image,
-        };
-      }
+    const message = {
+      chatId: chatId,
+      content: value,
+    };
 
-      console.log("message", message);
+    try {
+      const res = await postData("messages", isAuth.token, message);
 
-      socket.current.emit("sendMessage", message);
-
-      await newMessages(message);
-
-      setValue("");
-      setFile();
-      setImage("");
-      setNewMessageFlag((prev) => !prev);
+      setMessages((prev) => [...prev, res.data]);
+      socket.emit("new message", res.data);
+      console.log(res.data);
+    } catch (err) {
+      toast.error(err.message);
     }
+
+    setValue("");
+    // setNewMessageFlag((prev) => !prev);
   };
+
+  useEffect(() => {
+    socket = io(BASE_URL);
+    socket.emit("setup", userData);
+    socket.on("connected", () => setSocketConnected(true));
+  }, []);
+
+  useEffect(() => {
+    if (!chatId) return;
+    selectedChatCompare = chatId;
+    socket.emit("join chat", chatId);
+  }, [chatId]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      console.log("newMessageRecieved", newMessageRecieved);
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare !== newMessageRecieved.chat._id
+      ) {
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   return (
     <Wrapper>

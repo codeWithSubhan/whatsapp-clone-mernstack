@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
 import { Box, styled, Divider } from "@mui/material";
-import { getUsers } from "../../../services/api";
 
 import { AccountContext } from "../../../context/AccountProvider";
 
@@ -20,39 +19,16 @@ const StyledDivider = styled(Divider)`
 `;
 
 const Conversations = ({ text }) => {
-  const [users, setUsers] = useState([]);
-
-  const { account, socket, setActiveUsers } = useContext(AccountContext);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let data = await getUsers();
-      let fiteredData = data.filter((user) =>
-        user.name.toLowerCase().includes(text.toLowerCase())
-      );
-      setUsers(fiteredData);
-    };
-    fetchData();
-  }, [text]);
-
-  useEffect(() => {
-    socket.current.emit("addUser", account);
-    socket.current.on("getUsers", (users) => {
-      setActiveUsers(users);
-    });
-  }, [account]);
+  const { account, socket, setActiveUsers, users } = useContext(AccountContext);
 
   return (
     <Component>
-      {users?.map(
-        (user, i) =>
-          user.sub !== account.sub && (
-            <>
-              <Conversation user={user} />
-              {users.length !== i + 1 && <StyledDivider />}
-            </>
-          )
-      )}
+      {users?.map((user, i) => (
+        <>
+          <Conversation user={user} />
+          {users.length !== i + 1 && <StyledDivider />}
+        </>
+      ))}
     </Component>
   );
 };
