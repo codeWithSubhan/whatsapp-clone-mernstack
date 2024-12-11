@@ -10,7 +10,11 @@ const globalError = require("./controllers/errorController");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://whatsapp-clone-mernstack-d5bt.vercel.app",
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));

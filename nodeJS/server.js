@@ -38,7 +38,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     // origin: "http://localhost:3000",
-    origin: "whatsapp-clone-mernstack-q7li.vercel.app",
+    origin: "whatsapp-clone-mernstack-d5bt.vercel.app",
   },
 });
 
