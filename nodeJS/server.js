@@ -37,7 +37,7 @@ server.listen(port, () =>
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "whatsapp-clone-mernstack-d5bt.vercel.app",
+    origin: "https://whatsapp-clone-mernstack-d5bt.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
     // origin: "http://localhost:3000",
