@@ -13,6 +13,8 @@ const app = express();
 app.use(
   cors({
     origin: "https://whatsapp-clone-mernstack-d5bt.vercel.app",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
   })
 );
 app.use(express.json());
